@@ -1,0 +1,38 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Archivos de caché
+.cache/
+.tmp/
+
+# Cobertura de tests
+coverage/
+
+# Compilados
+dist/
+build/
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# npm
+package-lock.json
+yarn.lock
