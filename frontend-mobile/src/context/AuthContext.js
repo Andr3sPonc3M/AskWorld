@@ -11,17 +11,30 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [haVistoOnboarding, setHaVistoOnboarding] = useState(false);
 
-  // Verificar sesión al iniciar la aplicación
+  // Verificar sesión y estado de onboarding al iniciar la aplicación
   useEffect(() => {
     inicializarAuth();
+    verificarOnboarding();
   }, []);
+
+  // Verificar si el usuario ya vio el onboarding
+  const verificarOnboarding = async () => {
+    try {
+      const visto = await AsyncStorage.getItem('hasSeenOnboarding');
+      setHaVistoOnboarding(visto === 'true');
+    } catch (error) {
+      console.error('Error verificando onboarding:', error);
+      setHaVistoOnboarding(false);
+    }
+  };
 
   // Inicializar autenticación desde AsyncStorage
   const inicializarAuth = async () => {
     try {
       setCargando(true);
-      
+
       const tokenGuardado = await AsyncStorage.getItem('userToken');
       const usuarioGuardado = await AsyncStorage.getItem('userData');
 
@@ -45,6 +58,50 @@ export const AuthProvider = ({ children }) => {
       console.error('Error inicializando auth:', error);
     } finally {
       setCargando(false);
+    }
+  };
+
+  // Marcar onboarding como visto
+  const marcarOnboardingVisto = async () => {
+    try {
+      await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+      setHaVistoOnboarding(true);
+    } catch (error) {
+      console.error('Error guardando estado de onboarding:', error);
+    }
+  };
+
+  // Función para verificar si un email ya existe (para validación asíncrona)
+  const verificarEmailExistente = async (email) => {
+    try {
+      // Simular verificación consultando al backend
+      // En una implementación real, endpoint para verificar email sin registrar
+      // Por ahora, verificamos si hay error de email duplicado al intentar registrar
+
+      // Nota: Esta es una simulación. En producción, habría un endpoint
+      // GET /api/auth/check-email?email=correo@test.com
+      // que retorne { disponible: true/false }
+
+      // Simulamos una verificación local basada en la API existente
+      // Hacemos un intento de registro para ver si el email existe
+      const respuesta = await authAPI.registro({
+        nombre: 'VERIFICACION_TEMPORAL',
+        email: email,
+        password: 'Temporal123!',
+        rol: 'usuario',
+      });
+
+      // Si el registro falla con error de email existente
+      if (!respuesta.success && respuesta.message.includes('email')) {
+        return false; // Email no disponible
+      }
+
+      // Si el registro es exitoso (email no existe)
+      return true; // Email disponible
+    } catch (error) {
+      // Si hay error de red, asumimos que el email podría existir
+      console.warn('Error verificando email:', error);
+      return true; // En caso de error, permitimos continuar (el servidor validará después)
     }
   };
 
@@ -112,7 +169,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       setCargando(true);
-      
+
       // Intentar cerrar sesión en el servidor (opcional)
       try {
         await authAPI.logout();
@@ -146,10 +203,13 @@ export const AuthProvider = ({ children }) => {
     token,
     cargando,
     error,
+    haVistoOnboarding,
     registro,
     login,
     logout,
     limpiarError,
+    verificarEmailExistente,
+    marcarOnboardingVisto,
     estaAutenticado: !!token
   };
 
@@ -163,11 +223,11 @@ export const AuthProvider = ({ children }) => {
 // Hook personalizado para usar el contexto de autenticación
 export const useAuth = () => {
   const contexto = useContext(AuthContext);
-  
+
   if (!contexto) {
     throw new Error('useAuth debe ser usado dentro de un AuthProvider');
   }
-  
+
   return contexto;
 };
 

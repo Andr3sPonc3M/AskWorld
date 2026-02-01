@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
 
 // Importar pantallas
+import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -13,6 +14,23 @@ const Stack = createNativeStackNavigator();
 
 // Componente para pantalla de carga
 const LoadingScreen = () => null;
+
+// Componente de navegación de onboarding (solo primera vez)
+const OnboardingNavigator = () => (
+  <Stack.Navigator
+    initialRouteName="Onboarding"
+    screenOptions={{
+      headerShown: false,
+      animation: 'fade'
+    }}
+  >
+    <Stack.Screen 
+      name="Onboarding" 
+      component={OnboardingScreen}
+      options={{ animation: 'fade' }}
+    />
+  </Stack.Navigator>
+);
 
 // Componente de navegación de autenticación (público)
 const AuthStack = () => (
@@ -34,7 +52,14 @@ const AuthStack = () => (
       options={{
         animation: 'slide_from_right',
         headerShown: true,
-        title: 'Crear Cuenta'
+        title: 'Crear Cuenta',
+        headerStyle: {
+          backgroundColor: '#4F46E5',
+        },
+        headerTintColor: '#FFFFFF',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
       }}
     />
   </Stack.Navigator>
@@ -47,11 +72,11 @@ const AppStack = () => (
     screenOptions={{
       headerShown: true,
       headerStyle: {
-        backgroundColor: '#4F46E5'
+        backgroundColor: '#4F46E5',
       },
       headerTintColor: '#FFFFFF',
       headerTitleStyle: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       },
       animation: 'fade'
     }}
@@ -62,7 +87,6 @@ const AppStack = () => (
       options={{
         headerShown: true,
         title: 'Mi Cuenta',
-        headerRight: () => null // Aquí podrías agregar botón de logout
       }}
     />
   </Stack.Navigator>
@@ -70,7 +94,7 @@ const AppStack = () => (
 
 // Componente principal del navegador
 const AppNavigator = () => {
-  const { estaAutenticado, cargando } = useAuth();
+  const { estaAutenticado, cargando, haVistoOnboarding } = useAuth();
 
   if (cargando) {
     return <LoadingScreen />;
@@ -78,7 +102,14 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      {estaAutenticado ? <AppStack /> : <AuthStack />}
+      {/* Prioridad: 1) Onboarding (si no lo ha visto), 2) App (si está autenticado), 3) Auth */}
+      {!haVistoOnboarding ? (
+        <OnboardingNavigator />
+      ) : estaAutenticado ? (
+        <AppStack />
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 };
