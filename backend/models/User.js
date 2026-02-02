@@ -70,7 +70,7 @@ userSchema.methods.compararPassword = async function(passwordIngresado) {
 
   const andres= await bcrypt.compare(passwordIngresado, this.password);
   console.log(andres);
-  return true; 
+  return true;
   
 };
 
