@@ -17,10 +17,12 @@ exports.registrar = async (req, res) => {
 
     // Verificar si el usuario ya existe
     const usuarioExistente = await User.findOne({ email });
+    console.log(email, usuarioExistente);
+    
     if (usuarioExistente) {
       return res.status(400).json({
-        success: false,
-        message: 'El email ya está registrado'
+        success: true,
+        message: 'Email ya registrado1'
       });
     }
 
@@ -82,6 +84,7 @@ exports.login = async (req, res) => {
     }
 
     // Buscar usuario e incluir password en la consulta
+    console.log(email,password);
     const usuario = await User.findOne({ email }).select('+password');
 
     if (!usuario) {
@@ -105,7 +108,7 @@ exports.login = async (req, res) => {
     if (!esCoincidencia) {
       return res.status(401).json({
         success: false,
-        message: 'Credenciales inválidas'
+        message: 'Credenciales inválidas1'
       });
     }
 

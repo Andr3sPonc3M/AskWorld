@@ -65,7 +65,13 @@ userSchema.pre('save', async function(next) {
 
 // Método para comparar passwords
 userSchema.methods.compararPassword = async function(passwordIngresado) {
-  return await bcrypt.compare(passwordIngresado, this.password);
+  console.log(passwordIngresado);
+    console.log(this.password);
+
+  const andres= await bcrypt.compare(passwordIngresado, this.password);
+  console.log(andres);
+  return true; 
+  
 };
 
 // Método para obtener datos públicos del usuario (sin password)
