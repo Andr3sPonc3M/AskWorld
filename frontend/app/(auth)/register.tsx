@@ -45,10 +45,15 @@ export default function RegisterScreen() {
     try {
       // Detect device language
       const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'es';
+      console.log('Attempting registration with:', { email, username, deviceLanguage });
       await register(email, username, password, deviceLanguage);
       router.replace('/(tabs)/home');
     } catch (error: any) {
-      Alert.alert('Error', error.message);
+      console.error('Registration error:', error);
+      const errorMessage = error.message || 
+                          error.response?.data?.detail || 
+                          'Error al registrarse. Por favor intenta de nuevo.';
+      Alert.alert('Error de Registro', errorMessage);
     } finally {
       setLoading(false);
     }

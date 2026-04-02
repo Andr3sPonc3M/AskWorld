@@ -1,5 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+
+// Conditional import of AsyncStorage - only for native platforms
+let AsyncStorage: any = null;
+if (Platform.OS !== 'web') {
+  AsyncStorage = require('@react-native-async-storage/async-storage').default;
+}
 
 // Storage wrapper that works on both web and native
 const storage = {
@@ -11,7 +16,12 @@ const storage = {
         return null;
       }
     }
-    return await AsyncStorage.getItem(key);
+    if (!AsyncStorage) return null;
+    try {
+      return await AsyncStorage.getItem(key);
+    } catch {
+      return null;
+    }
   },
   
   setItem: async (key: string, value: string): Promise<void> => {
@@ -23,7 +33,12 @@ const storage = {
       }
       return;
     }
-    await AsyncStorage.setItem(key, value);
+    if (!AsyncStorage) return;
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch {
+      // Ignore errors
+    }
   },
   
   removeItem: async (key: string): Promise<void> => {
@@ -35,7 +50,12 @@ const storage = {
       }
       return;
     }
-    await AsyncStorage.removeItem(key);
+    if (!AsyncStorage) return;
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch {
+      // Ignore errors
+    }
   },
 };
 
