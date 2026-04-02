@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { Ionicons } from '@expo/vector-icons';
+import { AskWorldLogo } from '../../components/AskWorldLogo';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -47,8 +47,7 @@ export default function LoginScreen() {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.header}>
-            <Ionicons name="globe" size={64} color="#007AFF" />
-            <Text style={styles.title}>AskWorld</Text>
+            <AskWorldLogo size={120} showText={true} />
             <Text style={styles.subtitle}>Pregunta sin barreras de idioma</Text>
           </View>
 

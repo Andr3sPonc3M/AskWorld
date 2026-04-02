@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import api from '../../utils/api';
 import { getCategoryIcon } from '../../utils/categories';
 import { useAuth } from '../../contexts/AuthContext';
+import { AskWorldLogo } from '../../components/AskWorldLogo';
 
 interface Question {
   id: string;
@@ -112,7 +113,7 @@ export default function HomeScreen() {
           <Text style={styles.headerTitle}>AskWorld</Text>
           <Text style={styles.headerSubtitle}>Bienvenido, {user?.username}</Text>
         </View>
-        <Ionicons name="globe" size={32} color="#007AFF" />
+        <AskWorldLogo size={50} showText={false} />
       </View>
 
       <FlatList

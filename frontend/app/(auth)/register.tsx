@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
+import { AskWorldLogo } from '../../components/AskWorldLogo';
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('');
@@ -71,8 +72,7 @@ export default function RegisterScreen() {
           </TouchableOpacity>
 
           <View style={styles.header}>
-            <Ionicons name="globe" size={64} color="#007AFF" />
-            <Text style={styles.title}>Crear Cuenta</Text>
+            <AskWorldLogo size={100} showText={true} />
             <Text style={styles.subtitle}>Únete a la comunidad global</Text>
           </View>
 
