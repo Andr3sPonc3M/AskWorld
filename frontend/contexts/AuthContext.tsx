@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import storage from '../utils/storage';
 import api from '../utils/api';
 
 interface User {
@@ -31,14 +31,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadUser = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await storage.getItem('token');
       if (token) {
         const response = await api.get('/auth/me');
         setUser(response.data);
       }
     } catch (error) {
       console.error('Error loading user:', error);
-      await AsyncStorage.removeItem('token');
+      await storage.removeItem('token');
     } finally {
       setLoading(false);
     }
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await api.post('/auth/login', { email, password });
       const { access_token, user: userData } = response.data;
-      await AsyncStorage.setItem('token', access_token);
+      await storage.setItem('token', access_token);
       setUser(userData);
     } catch (error: any) {
       throw new Error(error.response?.data?.detail || 'Login failed');
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         native_language,
       });
       const { access_token, user: userData } = response.data;
-      await AsyncStorage.setItem('token', access_token);
+      await storage.setItem('token', access_token);
       setUser(userData);
     } catch (error: any) {
       throw new Error(error.response?.data?.detail || 'Registration failed');
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('token');
+    await storage.removeItem('token');
     setUser(null);
   };
 
