@@ -179,21 +179,28 @@ El conocimiento en internet está fragmentado por barreras lingüísticas. Una p
 
 ### 3.6 Traducción Automática ✅
 **Prioridad:** Alta  
-**Estado:** Completado (API disponible)
+**Estado:** Completado
 
 **Funcionalidades:**
 - **Endpoint de traducción**
   - Integración con LibreTranslate (API pública)
   - Traducción de texto entre idiomas
   - Detección automática de idioma origen
-
-**Nota:** La funcionalidad de traducción automática está implementada en el backend pero **NO** está integrada en la UI del frontend. Esta es una característica preparada para desarrollo futuro.
+- **UI de traducción integrada**
+  - Componente TranslatableText reutilizable
+  - Botón "Traducir" en preguntas y respuestas
+  - Toggle entre contenido original y traducido
+  - Caché de traducciones para mejor performance
+  - Indicador de idioma original (badge)
+  - Loading states durante traducción
 
 **Criterios de Aceptación:**
 - [x] API endpoint `/api/translate` funcional
 - [x] Traducción funciona entre idiomas comunes
-- [ ] UI muestra contenido traducido (pendiente)
-- [ ] Usuario puede cambiar idioma de visualización (pendiente)
+- [x] UI muestra botón de traducción cuando el idioma difiere del dispositivo
+- [x] Usuario puede alternar entre original y traducido
+- [x] Traducciones se cachean para evitar llamadas duplicadas
+- [x] Indicadores visuales claros de idioma original
 
 ---
 
@@ -396,9 +403,10 @@ El conocimiento en internet está fragmentado por barreras lingüísticas. Una p
 
 ## 8. Limitaciones Conocidas
 
-1. **Traducción no integrada en UI**
-   - El endpoint funciona pero la UI no traduce automáticamente
-   - Requiere implementación frontend adicional
+1. **Traducción bajo demanda (no automática)**
+   - La traducción requiere que el usuario presione el botón "Traducir"
+   - No hay traducción automática al abrir contenido
+   - Esto evita costos excesivos de API calls
 
 2. **Sin notificaciones push**
    - Los usuarios no reciben alertas de nuevas respuestas
@@ -419,6 +427,10 @@ El conocimiento en internet está fragmentado por barreras lingüísticas. Una p
 6. **Sin moderación de contenido**
    - No hay sistema de reportes
    - No hay moderadores
+
+7. **Límites de API de traducción**
+   - LibreTranslate API pública tiene rate limits (5 req/seg)
+   - Puede fallar en uso intensivo simultáneo
 
 ---
 

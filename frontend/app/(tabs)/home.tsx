@@ -21,6 +21,7 @@ interface Question {
   content: string;
   category: string;
   username: string;
+  original_language: string;
   votes: number;
   views: number;
   answer_count: number;
@@ -87,6 +88,10 @@ export default function HomeScreen() {
         <View style={styles.stat}>
           <Ionicons name="eye" size={16} color="#666" />
           <Text style={styles.statText}>{item.views}</Text>
+        </View>
+        <View style={styles.stat}>
+          <Ionicons name="language" size={16} color="#666" />
+          <Text style={styles.statText}>{item.original_language.toUpperCase()}</Text>
         </View>
       </View>
     </TouchableOpacity>

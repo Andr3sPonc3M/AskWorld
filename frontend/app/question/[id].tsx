@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import api from '../../utils/api';
 import { getCategoryIcon } from '../../utils/categories';
 import { useAuth } from '../../contexts/AuthContext';
+import { TranslatableText } from '../../components/TranslatableText';
 
 interface Question {
   id: string;
@@ -25,6 +26,7 @@ interface Question {
   category: string;
   username: string;
   user_id: string;
+  original_language: string;
   votes: number;
   views: number;
   answer_count: number;
@@ -36,6 +38,7 @@ interface Answer {
   content: string;
   username: string;
   user_id: string;
+  original_language: string;
   votes: number;
   created_at: string;
 }
@@ -215,7 +218,12 @@ export default function QuestionDetailScreen() {
             </View>
 
             <Text style={styles.questionTitle}>{question.title}</Text>
-            <Text style={styles.questionContent}>{question.content}</Text>
+            <TranslatableText
+              text={question.content}
+              originalLanguage={question.original_language}
+              itemId={`question-${question.id}`}
+              style={styles.questionContent}
+            />
 
             <View style={styles.questionFooter}>
               <View style={styles.voteContainer}>
@@ -264,7 +272,12 @@ export default function QuestionDetailScreen() {
                   )}
                 </View>
 
-                <Text style={styles.answerContent}>{answer.content}</Text>
+                <TranslatableText
+                  text={answer.content}
+                  originalLanguage={answer.original_language}
+                  itemId={`answer-${answer.id}`}
+                  style={styles.answerContent}
+                />
 
                 <View style={styles.answerFooter}>
                   <View style={styles.voteContainer}>

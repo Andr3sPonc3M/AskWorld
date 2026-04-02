@@ -35,7 +35,10 @@
 ### 🌐 Traducción Automática
 - Integración con **LibreTranslate** para traducción de contenido
 - Detección automática del idioma del dispositivo
-- Sistema preparado para traducir preguntas y respuestas al idioma nativo del usuario
+- Botón "Traducir" en cada pregunta y respuesta
+- Toggle entre contenido original y traducido
+- Caché de traducciones para mejor performance
+- Indicadores visuales de idioma original
 
 ### 🎨 Diseño Mobile-First
 - Interfaz oscura moderna
